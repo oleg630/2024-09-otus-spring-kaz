@@ -27,7 +27,7 @@ class BookRepositoryTest {
     @DisplayName("должен загружать информацию о книге студенте по ее id")
     @Test
     void shouldFindExpectedStudentById() {
-        Optional<Book> optionalActualBook = repositoryJpa.findById(1);
+        Optional<Book> optionalActualBook = repositoryJpa.findById(1L);
         Book expectedBook = em.find(Book.class, 1);
         assertThat(optionalActualBook).isPresent().get().isEqualToComparingFieldByField(expectedBook);
     }
