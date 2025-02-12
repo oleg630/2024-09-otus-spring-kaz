@@ -40,5 +40,6 @@
         <module>hw05-jdbc</module>
         <module>hw06-jpa</module>
         <module>hw07-spring-data</module>
+        <module>hw08-mongo-db</module>
     </modules>
 </project>
