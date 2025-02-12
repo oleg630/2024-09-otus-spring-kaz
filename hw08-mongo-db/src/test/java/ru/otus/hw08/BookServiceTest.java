@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @DisplayName("Сервис для работы с книгами")
 @DataMongoTest
 @EnableConfigurationProperties
-@ComponentScan({"ru.otus.hw08.repositories"})
+@ComponentScan({"ru.otus.hw08.repository"})
 @Import({BookServiceImpl.class})
 class BookServiceTest {
 
@@ -36,11 +36,11 @@ class BookServiceTest {
     BookServiceTest() {
         bookList = List.of(
                 new Book("1", "Book_1", new Author("1", "Author_1"),
-                        List.of(new Genre("1", "Genre_1"), new Genre("2", "Genre_2")), null),
+                        List.of(new Genre("1", "Genre_1"), new Genre("2", "Genre_2"))),
                 new Book("2", "Book_2", new Author("2", "Author_2"),
-                        List.of(new Genre("3", "Genre_3"), new Genre("4", "Genre_4")), null),
+                        List.of(new Genre("3", "Genre_3"), new Genre("4", "Genre_4"))),
                 new Book("3", "Book_3", new Author("3", "Author_3"),
-                        List.of(new Genre("5", "Genre_5"), new Genre("6", "Genre_6")), null)
+                        List.of(new Genre("5", "Genre_5"), new Genre("6", "Genre_6")))
         );
     }
 
@@ -84,7 +84,7 @@ class BookServiceTest {
     @Test
     void shouldSaveUpdatedBook() {
         var expected = new Book("2", "new title", new Author("3", "Author_3"),
-                List.of(new Genre("1", "Genre_1"), new Genre("6", "Genre_6")), null);
+                List.of(new Genre("1", "Genre_1"), new Genre("6", "Genre_6")));
 
         Optional<Book> actual = bookService.findById(expected.getId());
         assertTrue(actual.isPresent());

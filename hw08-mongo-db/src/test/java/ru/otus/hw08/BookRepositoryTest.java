@@ -17,7 +17,7 @@ import ru.otus.hw08.repository.BookRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DisplayName("Репозиторий на основе JPA для работы с книгами")
+@DisplayName("Репозиторий MongoDB для работы с книгами")
 @DataMongoTest
 @EnableConfigurationProperties
 @ComponentScan({"ru.otus.hw08.repositories"})
@@ -49,8 +49,7 @@ class BookRepositoryTest {
     @Test
     void shouldSaveNewBook() {
         var expectedBook = new Book(null, "BookTitle_10500", mongoTemplate.findById("1", Author.class),
-                List.of(mongoTemplate.findById("1", Genre.class), mongoTemplate.findById("3", Genre.class)),
-                null);
+                List.of(mongoTemplate.findById("1", Genre.class), mongoTemplate.findById("3", Genre.class)));
         var returnedBook = repository.save(expectedBook);
         assertThat(returnedBook).isNotNull()
                 .matches(book -> !book.getId().isBlank())
@@ -66,8 +65,7 @@ class BookRepositoryTest {
     @Test
     void shouldSaveUpdatedBook() {
         var expectedBook = new Book("1", "BookTitle_10500", mongoTemplate.findById("1", Author.class),
-                List.of(mongoTemplate.findById("1", Genre.class), mongoTemplate.findById("3", Genre.class)),
-                null);
+                List.of(mongoTemplate.findById("1", Genre.class), mongoTemplate.findById("3", Genre.class)));
 
         assertThat(repository.findById(expectedBook.getId()))
                 .isPresent()

@@ -3,13 +3,14 @@ package ru.otus.hw08.changelogs;
 import com.github.cloudyrock.mongock.ChangeLog;
 import com.github.cloudyrock.mongock.ChangeSet;
 import com.mongodb.client.MongoDatabase;
-import ru.otus.hw08.repository.AuthorRepository;
-import ru.otus.hw08.repository.BookRepository;
-import ru.otus.hw08.repository.GenreRepository;
 import ru.otus.hw08.model.Author;
 import ru.otus.hw08.model.Book;
 import ru.otus.hw08.model.Comment;
 import ru.otus.hw08.model.Genre;
+import ru.otus.hw08.repository.AuthorRepository;
+import ru.otus.hw08.repository.BookRepository;
+import ru.otus.hw08.repository.CommentRepository;
+import ru.otus.hw08.repository.GenreRepository;
 
 import java.util.List;
 
@@ -19,6 +20,8 @@ public class InitMongoDBDataChangeLog {
     private Author[] authors;
 
     private Genre[] genres;
+
+    private Book[] books;
 
     @ChangeSet(order = "000", id = "dropDB", author = "stvort", runAlways = true)
     public void dropDB(MongoDatabase database) {
@@ -52,14 +55,22 @@ public class InitMongoDBDataChangeLog {
 
     @ChangeSet(order = "003", id = "initBooks", author = "stvort", runAlways = true)
     public void initBooks(BookRepository repository) {
-        Book[] books = new Book[3];
-        books[0] = new Book("1", "Book_1", authors[0], List.of(genres[0], genres[1]), List.of(
-                new Comment("1", "my comment 1")
-        ));
-        books[1] = new Book("2", "Book_2", authors[1], List.of(genres[2], genres[3]), List.of());
-        books[2] = new Book("3", "Book_3", authors[2], List.of(genres[4], genres[5]), List.of());
+        books = new Book[3];
+        books[0] = new Book("1", "Book_1", authors[0], List.of(genres[0], genres[1]));
+        books[1] = new Book("2", "Book_2", authors[1], List.of(genres[2], genres[3]));
+        books[2] = new Book("3", "Book_3", authors[2], List.of(genres[4], genres[5]));
         for (Book book : books) {
             repository.save(book);
+        }
+    }
+
+    @ChangeSet(order = "004", id = "initComments", author = "stvort", runAlways = true)
+    public void initBooks(CommentRepository repository) {
+        Comment[] comments = new Comment[1];
+        comments[0] =  new Comment("1", books[0], "my comment 1");
+
+        for (Comment comment : comments) {
+            repository.save(comment);
         }
     }
 }

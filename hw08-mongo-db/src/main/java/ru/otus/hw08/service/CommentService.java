@@ -9,8 +9,8 @@ public interface CommentService {
 
     Comment insert(String bookId, String text);
 
-    Comment update(String bookId, String id, String text);
+    Comment update(String id, String text);
 
-    void deleteById(String bookId, String id);
+    void deleteById(String id);
 
 }

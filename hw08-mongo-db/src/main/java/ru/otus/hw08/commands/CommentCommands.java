@@ -31,13 +31,13 @@ public class CommentCommands {
     }
 
     @ShellMethod(value = "Update comment", key = "cu")
-    public void updateComment(String bookId, String id, String text) {
-        commentService.update(bookId, id, text);
+    public void updateComment(String id, String text) {
+        commentService.update(id, text);
     }
 
     @ShellMethod(value = "Delete comment by id", key = "cd")
-    public void deleteComment(String bookId, String id) {
-        commentService.deleteById(bookId, id);
+    public void deleteComment(String id) {
+        commentService.deleteById(id);
     }
 
 }
