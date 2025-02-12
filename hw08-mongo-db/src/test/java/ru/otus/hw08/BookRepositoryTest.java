@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import ru.otus.hw08.model.Author;
 import ru.otus.hw08.model.Genre;
@@ -20,7 +19,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("Репозиторий MongoDB для работы с книгами")
 @DataMongoTest
 @EnableConfigurationProperties
-@ComponentScan({"ru.otus.hw08.repositories"})
 class BookRepositoryTest {
 
     @Autowired

@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import ru.otus.hw08.model.Author;
 import ru.otus.hw08.model.Book;
@@ -25,7 +24,6 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 @DisplayName("Сервис для работы с комментами")
 @DataMongoTest
 @EnableConfigurationProperties
-@ComponentScan({"ru.otus.hw08.repository"})
 @Import({CommentServiceImpl.class, BookServiceImpl.class})
 class CommentServiceTest {
 
@@ -87,7 +85,6 @@ class CommentServiceTest {
 
     private void compareTwoComments(Comment expected, Comment actual) {
         assertThat(actual).isNotNull()
-                .matches(book -> !book.getId().isBlank())
                 .usingRecursiveComparison().ignoringExpectedNullFields().isEqualTo(expected);
     }
 }

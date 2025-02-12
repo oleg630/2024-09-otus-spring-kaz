@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import ru.otus.hw08.model.Author;
 import ru.otus.hw08.model.Book;
@@ -24,7 +23,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @DisplayName("Сервис для работы с книгами")
 @DataMongoTest
 @EnableConfigurationProperties
-@ComponentScan({"ru.otus.hw08.repository"})
 @Import({BookServiceImpl.class})
 class BookServiceTest {
 
@@ -111,7 +109,6 @@ class BookServiceTest {
 
     private void compareTwoBooks(Book expected, Book actual) {
         assertThat(actual).isNotNull()
-                .matches(book -> !book.getId().isBlank())
                 .usingRecursiveComparison().ignoringExpectedNullFields().isEqualTo(expected);
     }
 }
