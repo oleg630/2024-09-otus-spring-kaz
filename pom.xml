@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.4</version>
+        <version>3.3.2</version>
         <relativePath/>
     </parent>
     <groupId>ru.otus.hw</groupId>
@@ -33,13 +33,14 @@
     </properties>
 
     <modules>
-        <module>hw01-xml-config</module>
+        <!--module>hw01-xml-config</module>
         <module>hw02-annotation-config</module>
         <module>hw03-spring-boot</module>
         <module>hw04-spring-shell</module>
         <module>hw05-jdbc</module>
         <module>hw06-jpa</module>
         <module>hw07-spring-data</module>
-        <module>hw08-mongo-db</module>
+        <module>hw08-mongo-db</module-->
+        <module>hw09-spring-mvc</module>
     </modules>
 </project>
