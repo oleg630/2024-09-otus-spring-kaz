@@ -67,7 +67,7 @@
 
     <div class="row">
         <label for="book-genres-input" th:text="#{book-field-genres} + ':'">Genres:</label>
-        <input id="book-genres-input" name="genresId" type="text" th:value="*{genresIdAsString()}" value="Story, Horror" multiple />
+        <input id="book-genres-input" name="genresId" type="text" th:value="*{#strings.arrayJoin(genresId, ', ')}" value="Story, Horror" multiple />
         <div class="errors" th:if="${#fields.hasErrors('genresId')}" th:errors="*{genresId}">Wrong book genres error</div>
     </div>
 

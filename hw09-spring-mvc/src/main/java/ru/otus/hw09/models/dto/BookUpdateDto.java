@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class BookDto {
+public class BookUpdateDto {
 
     private long id;
 
@@ -20,10 +20,8 @@ public class BookDto {
     @Size(min = 2, max = 50, message = "{title-field-should-have-expected-size}")
     private String title;
 
-    private AuthorDto author;
+    private Long authorId;
 
     private List<Long> genresId;
-
-    private String genresNames;
 
 }

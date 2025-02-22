@@ -9,15 +9,15 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import ru.otus.hw09.mapper.BookMapper;
 import ru.otus.hw09.models.Author;
 import ru.otus.hw09.models.Book;
 import ru.otus.hw09.models.Genre;
 import ru.otus.hw09.models.dto.BookDto;
+import ru.otus.hw09.models.dto.BookUpdateDto;
 import ru.otus.hw09.services.BookService;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -35,7 +35,7 @@ class BookControllerTest {
     @MockBean
     private BookService bookService;    // = mock(BookService.class);
 
-    private final List<Book> bookList;
+    private final List<BookDto> bookList;
 
     private static final String MATCH_ANY = "[\\s\\S]*";
 
@@ -49,7 +49,7 @@ class BookControllerTest {
     ArgumentCaptor<Long> authorIdCaptor;
 
     @Captor
-    ArgumentCaptor<Set<Long>> genresIdCaptor;
+    ArgumentCaptor<List<Long>> genresIdCaptor;
 
 
     BookControllerTest() {
@@ -60,7 +60,7 @@ class BookControllerTest {
                         List.of(new Genre(3L, "Genre_3"), new Genre(4L, "Genre_4"))),
                 new Book(3L, "BookTitle_3", new Author(3L, "Author_3"),
                         List.of(new Genre(5L, "Genre_5"), new Genre(6L, "Genre_6")))
-        );
+        ).stream().map(BookMapper::toDto).toList();
     }
 
     @Test
@@ -75,13 +75,13 @@ class BookControllerTest {
                         MATCH_ANY + bookList.stream().map(b -> b.getAuthor().getFullName())
                                 .collect(Collectors.joining(MATCH_ANY)) + MATCH_ANY)))
                 .andExpect(content().string(MatchesPattern.matchesPattern(
-                        MATCH_ANY + bookList.stream().map(b -> b.getGenres().get(0).getName())
+                        MATCH_ANY + bookList.stream().map(b -> "Genre_" + b.getGenresId().get(0))
                                 .collect(Collectors.joining(MATCH_ANY)) + MATCH_ANY)));
     }
 
     @Test
     void editBookPage() throws Exception {
-        given(bookService.findById(1)).willReturn(Optional.ofNullable(bookList.get(0)));
+        given(bookService.findById(1)).willReturn(bookList.get(0));
         this.mvc.perform(MockMvcRequestBuilders.get("/edit?id={id}", 1))
                 .andExpect(status().isOk())
                 .andExpect(content().string(MatchesPattern.matchesPattern(
@@ -92,7 +92,7 @@ class BookControllerTest {
 
     @Test
     void editBookSave() throws Exception {
-        BookDto bookDto = BookDto.fromDomainObject(bookList.get(0));
+        BookUpdateDto bookDto = BookMapper.toUpdateDto(bookList.get(0));
 
         this.mvc.perform(MockMvcRequestBuilders.post("/edit?genresId={genresId}", "1,2")
                         .flashAttr("book", bookDto))
@@ -117,7 +117,7 @@ class BookControllerTest {
 
     @Test
     void createBookSave() throws Exception {
-        BookDto bookDto = BookDto.fromDomainObject(bookList.get(0));
+        BookUpdateDto bookDto = BookMapper.toUpdateDto(bookList.get(0));
 
         this.mvc.perform(MockMvcRequestBuilders.post("/create?genresId={genresId}", "1,2")
                         .flashAttr("book", bookDto))
@@ -131,8 +131,8 @@ class BookControllerTest {
 
     @Test
     void deleteBook() throws Exception {
-        BookDto bookDto = BookDto.fromDomainObject(bookList.get(0));
-        given(bookService.findById(1)).willReturn(Optional.ofNullable(bookList.get(0)));
+        BookDto bookDto = bookList.get(0);
+        given(bookService.findById(1)).willReturn(bookList.get(0));
 
         this.mvc.perform(MockMvcRequestBuilders.get("/delete?id={id}", bookDto.getId()))
                 .andExpect(status().isFound());

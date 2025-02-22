@@ -10,8 +10,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.otus.hw09.exceptions.EntityNotFoundException;
+import ru.otus.hw09.mapper.BookMapper;
 import ru.otus.hw09.models.dto.BookDto;
+import ru.otus.hw09.models.dto.BookUpdateDto;
 import ru.otus.hw09.services.BookService;
 
 import java.util.List;
@@ -25,7 +26,7 @@ public class BookController {
 
     @GetMapping("/")
     public String listBook(Model model) {
-        List<BookDto> books = bookService.findAll().stream().map(BookDto::fromDomainObject).toList();
+        List<BookDto> books = bookService.findAll();
 
         model.addAttribute("books", books);
         return "list";
@@ -33,15 +34,13 @@ public class BookController {
 
     @GetMapping("/edit")
     public String editBook(@RequestParam("id") long id, Model model) {
-        BookDto book = bookService.findById(id)
-                .map(BookDto::fromDomainObject)
-                .orElseThrow(() -> new EntityNotFoundException("Book with id " + id + " not found"));
+        BookUpdateDto book = BookMapper.toUpdateDto(bookService.findById(id));
         model.addAttribute("book", book);
         return "edit";
     }
 
     @PostMapping("/edit")
-    public String saveBook(@Valid @ModelAttribute("book") BookDto book,
+    public String saveBook(@Valid @ModelAttribute("book") BookUpdateDto book,
                            BindingResult bindingResult,
                            @RequestParam(value = "genresId", defaultValue = "") List<String> genresId
     ) {
@@ -55,12 +54,12 @@ public class BookController {
 
     @GetMapping("/create")
     public String createBook(Model model) {
-        model.addAttribute("book", new BookDto());
+        model.addAttribute("book", new BookUpdateDto());
         return "create";
     }
 
     @PostMapping("/create")
-    public String createBook(@Valid @ModelAttribute("book") BookDto book,
+    public String createBook(@Valid @ModelAttribute("book") BookUpdateDto book,
                            BindingResult bindingResult,
                            @RequestParam(value = "genresId", defaultValue = "") List<String> genresId
     ) {
@@ -74,9 +73,6 @@ public class BookController {
 
     @GetMapping("/delete")
     public String deleteBook(@RequestParam("id") long id) {
-        bookService.findById(id)
-                .map(BookDto::fromDomainObject)
-                .orElseThrow(() -> new EntityNotFoundException("Book with id " + id + " not found"));
         bookService.deleteById(id);
         return "redirect:/";
     }
